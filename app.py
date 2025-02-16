@@ -1,12 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
-from datetime import datetime, timezone, timedelta
 
 # Flask アプリケーションの作成
 app = Flask(__name__)
-
-# JST（日本時間）のタイムゾーンを設定
-JST = timezone(timedelta(hours=9))
 
 # データベース接続を行う関数
 def get_db_connection():
@@ -14,12 +10,12 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-# ホーム画面を表示
+# ホーム画面
 @app.route('/')
 def index():
     return 'Welcome to Cafe App!'
 
-# ユーザー登録画面を表示
+# ユーザー登録
 @app.route('/register_user', methods=['GET', 'POST'])
 def register_user():
     if request.method == 'POST':
@@ -40,7 +36,7 @@ def register_user():
 
     return render_template('register_user.html')
 
-# 商品登録画面を表示
+# 商品登録
 @app.route('/register', methods=['GET', 'POST'])
 def register_product():
     if request.method == 'POST':
@@ -69,7 +65,7 @@ def register_product():
 
     return render_template('register_product.html')
 
-# 在庫更新処理
+# 在庫更新
 @app.route('/update_stock', methods=['GET', 'POST'])
 def update_stock():
     conn = get_db_connection()
@@ -112,12 +108,9 @@ def update_stock():
             else:
                 return "在庫が存在しないため、出庫できません。"
 
-        # 日本時間で取引日時を取得
-        current_time_jst = datetime.now(JST).strftime('%Y-%m-%d %H:%M:%S')
-
         cursor.execute(
-            "INSERT INTO TransactionHistory (product_id, user_id, quantity, transaction_type, transaction_date, notes) VALUES (?, ?, ?, ?, ?, ?)",
-            (product_id, user_id, quantity, transaction_type, current_time_jst, notes)
+            "INSERT INTO TransactionHistory (product_id, user_id, quantity, transaction_type, transaction_date, notes) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?)",
+            (product_id, user_id, quantity, transaction_type, notes)
         )
 
         conn.commit()
@@ -127,7 +120,7 @@ def update_stock():
 
     return render_template('update_stock.html', products=products, users=users)
 
-# 商品ごとの在庫数を表示する処理
+# 在庫表示
 @app.route('/view_stock')
 def view_stock():
     conn = get_db_connection()
@@ -135,7 +128,7 @@ def view_stock():
     cursor.execute('''
     SELECT Product.name, Product.category, Product.price, Stock.quantity
     FROM Product
-    LEFT JOIN Stock ON Product.id = Stock.product_id
+    LEFT JOIN Stock ON Product.ID = Stock.product_id
     ''')
     products = cursor.fetchall()
     conn.close()
@@ -147,21 +140,55 @@ def view_transaction_history():
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
-    SELECT Product.name AS product_name, User.username AS user_name, TransactionHistory.transaction_type, 
-           TransactionHistory.quantity, TransactionHistory.transaction_date, TransactionHistory.notes
+    SELECT TransactionHistory.id, Product.name AS product_name, User.username AS user_name, 
+           TransactionHistory.transaction_type, TransactionHistory.quantity, 
+           TransactionHistory.transaction_date, TransactionHistory.notes
     FROM TransactionHistory
     JOIN Product ON TransactionHistory.product_id = Product.id
     JOIN User ON TransactionHistory.user_id = User.id
     ''')
     transactions = cursor.fetchall()
     
-    # デバッグ用: 取得したデータをターミナルに出力
-    print("取得した取引履歴:")
-    for transaction in transactions:
-        print(dict(transaction))  # ← データを辞書形式で出力
-    
     conn.close()
     return render_template('view_transaction_history.html', transactions=transactions)
+
+# 取引編集
+@app.route('/edit_transaction/<int:transaction_id>', methods=['GET', 'POST'])
+def edit_transaction(transaction_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        new_quantity = request.form['quantity']
+        new_transaction_type = request.form['transaction_type']
+        new_notes = request.form['notes']
+
+        cursor.execute(
+            "UPDATE TransactionHistory SET quantity = ?, transaction_type = ?, notes = ? WHERE id = ?",
+            (new_quantity, new_transaction_type, new_notes, transaction_id)
+        )
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('view_transaction_history'))
+
+    cursor.execute("SELECT * FROM TransactionHistory WHERE id = ?", (transaction_id,))
+    transaction = cursor.fetchone()
+    conn.close()
+
+    return render_template('edit_transaction.html', transaction=transaction)
+
+# 取引削除
+@app.route('/delete_transaction/<int:transaction_id>', methods=['GET'])
+def delete_transaction(transaction_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM TransactionHistory WHERE id = ?", (transaction_id,))
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for('view_transaction_history'))
 
 if __name__ == '__main__':
     app.run(debug=True)

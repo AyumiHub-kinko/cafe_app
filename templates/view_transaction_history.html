@@ -10,23 +10,30 @@
     <table border="1">
         <thead>
             <tr>
-                <th>ユーザー名</th>  <!-- 追加 -->
                 <th>商品名</th>
                 <th>取引種類</th>
                 <th>数量</th>
                 <th>取引日</th>
+                <th>ユーザー</th>
                 <th>メモ</th>
+                <th>操作</th> <!-- 追加 -->
             </tr>
         </thead>
         <tbody>
             {% for transaction in transactions %}
                 <tr>
-                    <td>{{ transaction['user_name'] }}</td>  <!-- 追加 -->
                     <td>{{ transaction['product_name'] }}</td>
                     <td>{{ transaction['transaction_type'] }}</td>
                     <td>{{ transaction['quantity'] }}</td>
                     <td>{{ transaction['transaction_date'] }}</td>
+                    <td>{{ transaction['user_name'] }}</td>
                     <td>{{ transaction['notes'] }}</td>
+                    <td>
+                        <!-- 編集ボタン -->
+                        <a href="{{ url_for('edit_transaction', transaction_id=transaction['id']) }}">編集</a> |
+                        <!-- 削除ボタン（確認ダイアログ付き） -->
+                        <a href="{{ url_for('delete_transaction', transaction_id=transaction['id']) }}" onclick="return confirm('本当に削除しますか？');">削除</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

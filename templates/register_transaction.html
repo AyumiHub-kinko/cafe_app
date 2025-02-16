@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register Transaction</title>
+</head>
+<body>
+    <h1>Register Transaction</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            <label for="product_id">Product</label>
+            {{ form.product_id() }}
+        </div>
+        <div>
+            <label for="user_id">User</label>
+            {{ form.user_id() }}
+        </div>
+        <div>
+            <label for="transaction_type">Transaction Type</label>
+            {{ form.transaction_type() }}
+        </div>
+        <div>
+            <label for="quantity">Quantity</label>
+            {{ form.quantity() }}
+        </div>
+        <div>
+            <label for="transaction_date">Transaction Date</label>
+            {{ form.transaction_date() }}
+        </div>
+        <div>
+            <label for="notes">Notes</label>
+            {{ form.notes() }}
+        </div>
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</body>
+</html>

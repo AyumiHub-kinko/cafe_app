@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>取引履歴</title>
+</head>
+<body>
+    <h1>取引履歴</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>商品名</th>
+                <th>取引種類</th>
+                <th>数量</th>
+                <th>取引日</th>
+                <th>メモ</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction['product_name'] }}</td>  <!-- 修正 -->
+                    <td>{{ transaction['transaction_type'] }}</td>
+                    <td>{{ transaction['quantity'] }}</td>
+                    <td>{{ transaction['transaction_date'] }}</td>
+                    <td>{{ transaction['notes'] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <a href="/">ホームに戻る</a>
+</body>
+</html>

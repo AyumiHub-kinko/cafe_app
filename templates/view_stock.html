@@ -2,30 +2,33 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>商品リスト</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在庫一覧</title>
 </head>
 <body>
-    <h1>商品リスト</h1>
+    <h1>在庫一覧</h1>
     <table border="1">
         <thead>
             <tr>
                 <th>商品名</th>
-                <th>商品説明</th>
                 <th>カテゴリー</th>
                 <th>価格</th>
+                <th>在庫数</th>
             </tr>
         </thead>
         <tbody>
             {% for product in products %}
                 <tr>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.description }}</td>
-                    <td>{{ product.category }}</td>
-                    <td>{{ product.price }}</td>
+                    <td>{{ product['name'] }}</td>
+                    <td>{{ product['category'] }}</td>
+                    <td>{{ product['price'] }}</td>
+                    <td>{{ product['quantity'] }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{ url_for('register_product') }}">商品登録ページへ</a>
+
+    <br>
+    <a href="/">ホームに戻る</a>
 </body>
 </html>

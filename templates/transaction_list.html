@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>取引履歴</title>
+</head>
+<body>
+    <h1>取引履歴</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>商品</th>
+                <th>ユーザー</th>
+                <th>入出庫</th>
+                <th>数量</th>
+                <th>取引日</th>
+                <th>メモ</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.product.name }}</td> <!-- 商品名 -->
+                    <td>{{ transaction.user.username }}</td> <!-- ユーザー名 -->
+                    <td>{{ transaction.transaction_type }}</td> <!-- 入出庫のタイプ -->
+                    <td>{{ transaction.quantity }}</td> <!-- 数量 -->
+                    <td>{{ transaction.transaction_date }}</td> <!-- 取引日 -->
+                    <td>{{ transaction.notes }}</td> <!-- メモ -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('register_transaction') }}">入出庫登録ページへ</a>
+</body>
+</html>

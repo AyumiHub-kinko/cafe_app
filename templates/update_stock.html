@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在庫更新</title>
+</head>
+<body>
+    <h1>在庫更新</h1>
+    <form action="{{ url_for('update_stock') }}" method="POST">
+        <label for="product_id">商品:</label><br>
+        <select name="product_id" id="product_id" required>
+            <option value="" disabled selected>商品を選択してください</option>
+            {% for product in products %}
+                <option value="{{ product['ID'] }}">{{ product['name'] }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="user_id">ユーザー:</label><br>
+        <select name="user_id" id="user_id" required>
+            <option value="" disabled selected>ユーザーを選択してください</option>
+            {% for user in users %}
+                <option value="{{ user['ID'] }}">{{ user['username'] }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="quantity">数量:</label><br>
+        <input type="number" name="quantity" id="quantity" required><br><br>
+
+        <label for="transaction_type">取引種類:</label><br>
+        <select name="transaction_type" id="transaction_type" required>
+            <option value="入庫">入庫</option>
+            <option value="出庫">出庫</option>
+        </select><br><br>
+
+        <label for="notes">メモ:</label><br>
+        <textarea name="notes" id="notes"></textarea><br><br>
+
+        <button type="submit">更新</button>
+    </form>
+
+    <br>
+    <a href="/">ホームに戻る</a>
+</body>
+</html>

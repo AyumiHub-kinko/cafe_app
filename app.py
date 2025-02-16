@@ -1,8 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+from datetime import datetime, timezone, timedelta
 
 # Flask アプリケーションの作成
 app = Flask(__name__)
+
+# JST（日本時間）のタイムゾーンを設定
+JST = timezone(timedelta(hours=9))
 
 # データベース接続を行う関数
 def get_db_connection():
@@ -108,9 +112,12 @@ def update_stock():
             else:
                 return "在庫が存在しないため、出庫できません。"
 
+        # 日本時間で取引日時を取得
+        current_time_jst = datetime.now(JST).strftime('%Y-%m-%d %H:%M:%S')
+
         cursor.execute(
-            "INSERT INTO TransactionHistory (product_id, user_id, quantity, transaction_type, transaction_date, notes) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?)",
-            (product_id, user_id, quantity, transaction_type, notes)
+            "INSERT INTO TransactionHistory (product_id, user_id, quantity, transaction_type, transaction_date, notes) VALUES (?, ?, ?, ?, ?, ?)",
+            (product_id, user_id, quantity, transaction_type, current_time_jst, notes)
         )
 
         conn.commit()
@@ -128,7 +135,7 @@ def view_stock():
     cursor.execute('''
     SELECT Product.name, Product.category, Product.price, Stock.quantity
     FROM Product
-    LEFT JOIN Stock ON Product.ID = Stock.product_id
+    LEFT JOIN Stock ON Product.id = Stock.product_id
     ''')
     products = cursor.fetchall()
     conn.close()
@@ -155,9 +162,6 @@ def view_transaction_history():
     
     conn.close()
     return render_template('view_transaction_history.html', transactions=transactions)
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)

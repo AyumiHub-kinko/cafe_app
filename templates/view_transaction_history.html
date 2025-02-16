@@ -10,6 +10,7 @@
     <table border="1">
         <thead>
             <tr>
+                <th>ユーザー名</th>  <!-- 追加 -->
                 <th>商品名</th>
                 <th>取引種類</th>
                 <th>数量</th>
@@ -20,7 +21,8 @@
         <tbody>
             {% for transaction in transactions %}
                 <tr>
-                    <td>{{ transaction['product_name'] }}</td>  <!-- 修正 -->
+                    <td>{{ transaction['user_name'] }}</td>  <!-- 追加 -->
+                    <td>{{ transaction['product_name'] }}</td>
                     <td>{{ transaction['transaction_type'] }}</td>
                     <td>{{ transaction['quantity'] }}</td>
                     <td>{{ transaction['transaction_date'] }}</td>

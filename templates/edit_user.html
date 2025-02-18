@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ユーザー編集</title>
+</head>
+<body>
+    <h1>ユーザー編集</h1>
+    <form action="/edit_user/{{ user['id'] }}" method="post">
+        <label for="username">ユーザー名:</label>
+        <input type="text" id="username" name="username" value="{{ user['username'] }}" required>
+        <br>
+
+        <label for="password">パスワード:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+
+        <label for="role">役割:</label>
+        <select id="role" name="role">
+            <option value="admin" {% if user['role'] == 'admin' %}selected{% endif %}>管理者</option>
+            <option value="staff" {% if user['role'] == 'staff' %}selected{% endif %}>スタッフ</option>
+        </select>
+        <br>
+
+        <button type="submit">更新</button>
+    </form>
+
+    <br>
+    <a href="/register_user">ユーザー一覧に戻る</a>
+</body>
+</html>

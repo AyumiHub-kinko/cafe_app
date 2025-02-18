@@ -1,39 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Register Transaction</title>
+    <title>取引登録</title>
 </head>
 <body>
-    <h1>Register Transaction</h1>
+    <h1>取引登録</h1>
     <form method="POST">
-        {{ form.hidden_tag() }}
         <div>
-            <label for="product_id">Product</label>
-            {{ form.product_id() }}
+            <label for="product_id">商品</label>
+            <select name="product_id" required>
+                {% for product in products %}
+                    <option value="{{ product['id'] }}">{{ product['name'] }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div>
-            <label for="user_id">User</label>
-            {{ form.user_id() }}
+            <label for="transaction_type">取引タイプ</label>
+            <select name="transaction_type" required>
+                <option value="in">入庫</option>
+                <option value="out">出庫</option>
+            </select>
         </div>
         <div>
-            <label for="transaction_type">Transaction Type</label>
-            {{ form.transaction_type() }}
+            <label for="quantity">数量</label>
+            <input type="number" name="quantity" required>
         </div>
         <div>
-            <label for="quantity">Quantity</label>
-            {{ form.quantity() }}
+            <label for="transaction_date">取引日</label>
+            <input type="datetime-local" name="transaction_date" required>
         </div>
         <div>
-            <label for="transaction_date">Transaction Date</label>
-            {{ form.transaction_date() }}
+            <label for="notes">メモ</label>
+            <input type="text" name="notes">
         </div>
         <div>
-            <label for="notes">Notes</label>
-            {{ form.notes() }}
-        </div>
-        <div>
-            <button type="submit">Submit</button>
+            <button type="submit">登録</button>
         </div>
     </form>
+    
+    <br>
+    <a href="{{ url_for('transaction_list') }}">取引履歴へ戻る</a>
 </body>
 </html>

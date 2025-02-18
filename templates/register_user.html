@@ -3,55 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>在庫更新</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <title>ユーザー登録</title>
 </head>
 <body>
-    <div class="container mt-4">
-        <h2>在庫更新</h2>
-        <form method="POST" action="/update_stock">
-            <div class="mb-3">
-                <label for="product_id" class="form-label">商品</label>
-                <select class="form-select" id="product_id" name="product_id" required>
-                    {% if products %}
-                        {% for product in products %}
-                        <option value="{{ product['ID'] }}">{{ product['name'] }}</option>
-                        {% endfor %}
-                    {% else %}
-                        <option value="" disabled>商品がありません</option>
-                    {% endif %}
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="user_id" class="form-label">ユーザー</label>
-                <select class="form-select" id="user_id" name="user_id" required>
-                    {% if users %}
-                        {% for user in users %}
-                        <option value="{{ user['ID'] }}">{{ user['username'] }}</option>
-                        {% endfor %}
-                    {% else %}
-                        <option value="" disabled>ユーザーがいません</option>
-                    {% endif %}
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="quantity" class="form-label">数量</label>
-                <input type="number" class="form-control" id="quantity" name="quantity" required>
-            </div>
-            <div class="mb-3">
-                <label for="transaction_type" class="form-label">取引種別</label>
-                <select class="form-select" id="transaction_type" name="transaction_type" required>
-                    <option value="入庫">入庫</option>
-                    <option value="出庫">出庫</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="notes" class="form-label">備考</label>
-                <input type="text" class="form-control" id="notes" name="notes">
-            </div>
-            <button type="submit" class="btn btn-primary">更新</button>
-        </form>
-        <a href="/" class="btn btn-secondary mt-3">ホームに戻る</a>
-    </div>
+    <h1>ユーザー登録</h1>
+    {% if 'user_id' in session %}
+    <p>ログイン中: {{ session['username'] }}</p>
+    <a href="{{ url_for('logout') }}">ログアウト</a>
+{% else %}
+    <a href="{{ url_for('login') }}">ログイン</a>
+{% endif %}
+
+    <form action="/register_user" method="post">
+        <label for="username">ユーザー名:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+
+        <label for="password">パスワード:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+
+        <label for="role">役割:</label>
+        <select id="role" name="role">
+            <option value="admin">管理者</option>
+            <option value="staff">スタッフ</option>
+        </select>
+        <br>
+
+        <button type="submit">登録</button>
+    </form>
+
+    <h2>登録済みユーザー一覧</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ユーザー名</th>
+                <th>役割</th>
+                <th>作成日</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user['id'] }}</td>
+                    <td>{{ user['username'] }}</td>
+                    <td>{{ user['role'] }}</td>
+                    <td>{{ user['created_at'] }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_user', user_id=user['id']) }}">編集</a>
+                        <a href="{{ url_for('delete_user', user_id=user['id']) }}" onclick="return confirm('本当に削除しますか？');">削除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <a href="/">ホームに戻る</a>
 </body>
 </html>

@@ -4,36 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>在庫一覧</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>在庫一覧</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>商品名</th>
-                <th>カテゴリー</th>
-                <th>価格</th>
-                <th>在庫数</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for product in products %}
-                <tr>
-                    <td>{{ product['name'] }}</td>
-                    <td>{{ product['category'] }}</td>
-                    <td>{{ product['price'] }}</td>
-                    <td>{{ product['quantity'] }}</td>
-                    <td>
-                        <a href="{{ url_for('edit_stock', product_id=product['product_id']) }}">編集</a> |
-                        <a href="{{ url_for('delete_stock', product_id=product['product_id']) }}" onclick="return confirm('本当に削除しますか？');">削除</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container mt-5">
+        <h1 class="text-center text-primary mb-4">在庫一覧</h1>
 
-    <br>
-    <a href="/">ホームに戻る</a>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>商品名</th>
+                    <th>カテゴリー</th>
+                    <th>価格</th>
+                    <th>在庫数</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product['name'] }}</td>
+                        <td>{{ product['category'] }}</td>
+                        <td>{{ product['price'] }}</td>
+                        <td>{{ product['quantity'] }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_stock', product_id=product['product_id']) }}" class="btn btn-warning btn-sm">編集</a>
+                            <a href="{{ url_for('delete_stock', product_id=product['product_id']) }}" onclick="return confirm('本当に削除しますか？');" class="btn btn-danger btn-sm">削除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <br>
+        <a href="/" class="btn btn-secondary w-100">ホームに戻る</a>
+    </div>
+
+    <!-- Bootstrap JS（必要なら） -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 </body>
 </html>

@@ -3,44 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>取引履歴</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>取引履歴</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>商品</th>
-                <th>ユーザー</th>
-                <th>入出庫</th>
-                <th>数量</th>
-                <th>取引日</th>
-                <th>メモ</th>
-                <th>操作</th>  <!-- 新しく追加 -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for transaction in transactions %}
+    <div class="container mt-5">
+        <h1 class="text-center text-primary mb-4">取引履歴</h1>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
                 <tr>
-                    <td>{{ transaction['product_name'] }}</td>
-                    <td>{{ transaction['user_name'] }}</td>
-                    <td>{{ transaction['transaction_type'] }}</td>
-                    <td>{{ transaction['quantity'] }}</td>
-                    <td>{{ transaction['transaction_date'] }}</td>
-                    <td>{{ transaction['notes'] }}</td>
-                    <td>
-                        <a href="{{ url_for('edit_transaction', transaction_id=transaction['id']) }}">編集</a> |
-                        <a href="{{ url_for('delete_transaction', transaction_id=transaction['id']) }}" onclick="return confirm('本当に削除しますか？');">削除</a>
-                    </td>
+                    <th>商品</th>
+                    <th>ユーザー</th>
+                    <th>入出庫</th>
+                    <th>数量</th>
+                    <th>取引日</th>
+                    <th>メモ</th>
+                    <th>操作</th>  <!-- 新しく追加 -->
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-    <br>
-    <a href="{{ url_for('register_product') }}">商品登録ページへ</a>
-    <br>
-    <a href="{{ url_for('view_stock') }}">在庫一覧ページへ</a>
-    <br>
-    <a href="{{ url_for('register_transaction') }}">取引登録ページへ</a>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction['product_name'] }}</td>
+                        <td>{{ transaction['user_name'] }}</td>
+                        <td>{{ transaction['transaction_type'] }}</td>
+                        <td>{{ transaction['quantity'] }}</td>
+                        <td>{{ transaction['transaction_date'] }}</td>
+                        <td>{{ transaction['notes'] }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_transaction', transaction_id=transaction['id']) }}" class="btn btn-warning btn-sm">編集</a>
+                            <a href="{{ url_for('delete_transaction', transaction_id=transaction['id']) }}" onclick="return confirm('本当に削除しますか？');" class="btn btn-danger btn-sm">削除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="mt-4">
+            <a href="{{ url_for('register_product') }}" class="btn btn-primary w-100 mb-2">商品登録ページへ</a>
+            <a href="{{ url_for('view_stock') }}" class="btn btn-secondary w-100 mb-2">在庫一覧ページへ</a>
+            <a href="{{ url_for('register_transaction') }}" class="btn btn-success w-100">取引登録ページへ</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS（必要なら） -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 </body>
 </html>

@@ -4,26 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>商品登録</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>商品登録</h1>
-    <form action="{{ url_for('register_product') }}" method="POST">
-        <label for="name">商品名:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
+    <div class="container mt-5">
+        <h1 class="text-center text-primary mb-4">商品登録</h1>
 
-        <label for="description">商品説明:</label><br>
-        <textarea id="description" name="description" required></textarea><br><br>
+        <form action="{{ url_for('register_product') }}" method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">商品名:</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
 
-        <label for="category">カテゴリー:</label><br>
-        <input type="text" id="category" name="category" required><br><br>
+            <div class="mb-3">
+                <label for="description" class="form-label">商品説明:</label>
+                <textarea id="description" name="description" class="form-control" required></textarea>
+            </div>
 
-        <label for="price">価格:</label><br>
-        <input type="number" id="price" name="price" step="0.01" required><br><br>
+            <div class="mb-3">
+                <label for="category" class="form-label">カテゴリー:</label>
+                <input type="text" id="category" name="category" class="form-control" required>
+            </div>
 
-        <button type="submit">登録</button>
-    </form>
+            <div class="mb-3">
+                <label for="price" class="form-label">価格:</label>
+                <input type="number" id="price" name="price" class="form-control" step="0.01" required>
+            </div>
 
-    <br>
-    <a href="/">ホームに戻る</a>
+            <button type="submit" class="btn btn-success w-100">登録</button>
+        </form>
+
+        <br>
+        <a href="/" class="btn btn-secondary w-100">ホームに戻る</a>
+    </div>
+
+    <!-- Bootstrap JS（必要なら） -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 </body>
 </html>
